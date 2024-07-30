@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "ingame-timer",
+  "version": "${version}",
+  "name": "Ingame-Timer",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/ingame-timer/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "de.gummiangler.client.ingame_timerClient"
+    ],
+    "main": [
+      "de.gummiangler.ingame_timer"
+    ]
+  },
+  "mixins": [
+    "ingame-timer.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
