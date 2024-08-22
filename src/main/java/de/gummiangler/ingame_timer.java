@@ -77,7 +77,7 @@ public class ingame_timer implements ModInitializer {
                 matrixStack.push();
                 matrixStack.scale(scale, scale, scale);
                 int x = (int) ((ctx.getScaledWindowWidth() - renderer[0].getWidth(timeString)) / 2);
-                int y = (int) ((ctx.getScaledWindowHeight() - 50));
+                int y = (int) ((ctx.getScaledWindowHeight() - 60));
 
                 ctx.drawText(renderer[0], timeString, x, y, 0x00FF00, false);
                 matrixStack.pop();
