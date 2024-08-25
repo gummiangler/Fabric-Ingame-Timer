@@ -12,6 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.CommandSource;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
 
 import java.io.*;
@@ -34,14 +35,19 @@ public class ingame_timer implements ModInitializer {
     private Map<String, Long> worldTimers = new HashMap<>();
     private boolean timerPaused = false;
 
+
+
+
     @Override
     public void onInitialize() {
         loadTimers();
         final TextRenderer[] renderer = new TextRenderer[1];
 
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.world != null && !worldLoaded) {
-                currentWorldName = formatWorldName(client.getServer().getSaveProperties().getLevelName());
+                onStartGameSession();
+                //currentWorldName = formatWorldName(client.getServer().getSaveProperties().getLevelName());
                 if (!worldTimers.containsKey(currentWorldName)) {
                     worldTimers.put(currentWorldName, 0L); // Initial Timer for new world
                 }
@@ -77,7 +83,7 @@ public class ingame_timer implements ModInitializer {
                 matrixStack.push();
                 matrixStack.scale(scale, scale, scale);
                 int x = (int) ((ctx.getScaledWindowWidth() - renderer[0].getWidth(timeString)) / 2);
-                int y = (int) ((ctx.getScaledWindowHeight() - 60));
+                int y = (int) ((ctx.getScaledWindowHeight() - 70));
 
                 ctx.drawText(renderer[0], timeString, x, y, 0x00FF00, false);
                 matrixStack.pop();
@@ -118,6 +124,25 @@ public class ingame_timer implements ModInitializer {
                     }));
         });
     }
+
+
+    private void onStartGameSession() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        MinecraftServer server = client.getServer(); // Kann bei Multiplayer null sein
+
+        if (server != null) { // Singleplayer
+            currentWorldName = formatWorldName(server.getSaveProperties().getLevelName());
+        } else if (client.getCurrentServerEntry() != null) { // Multiplayer
+            currentWorldName = client.getCurrentServerEntry().address;
+        } else {
+            System.err.println("Error: Unable to determine world identifier.");
+            return;
+        }
+
+        System.out.println("World Identifier: " + currentWorldName);
+    }
+
+
 
     private void loadTimers() {
         if (Files.notExists(CONFIG_DIR)) {
