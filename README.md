@@ -1,5 +1,5 @@
 # Fabric Ingame Timer
-An in-game timer for Fabric to track time played in worlds.
+An in-game timer for Fabric to track time played in worlds and server.
 
 # Installing
 To use this mod, all you need to do is put the .jar file from the release for your Fabric version and the Fabric API into your mod folder.
